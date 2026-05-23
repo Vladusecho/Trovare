@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.okhttp3.client)
     // ViewModels
     implementation(libs.viewmodels)
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.network)
     // Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
