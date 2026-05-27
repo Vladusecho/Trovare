@@ -21,8 +21,12 @@ class MainViewModel : ViewModel() {
         when (command) {
             is MainCommand.InputQuery -> {
                 viewModelScope.launch {
-                    val movies = getMoviesByNameUseCase(command.query)
-                    _state.value = MainState.Content(movies)
+                    _state.value = MainState.Loading
+                    val searchResponse = getMoviesByNameUseCase(command.query)
+                    _state.value = MainState.Content(
+                        movies = searchResponse.movies,
+                        total = searchResponse.total
+                    )
                 }
             }
         }
@@ -37,7 +41,8 @@ class MainViewModel : ViewModel() {
     sealed interface MainState {
         object Initial : MainState
         data class Content(
-            val movies: List<Movie>
+            val movies: List<Movie>,
+            val total: Int
         ) : MainState
         object Error : MainState
         object Loading : MainState
