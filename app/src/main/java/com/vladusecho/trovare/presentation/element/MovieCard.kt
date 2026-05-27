@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -45,7 +46,6 @@ fun MovieCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(144.dp)
             .background(Color.White)
     ) {
         Row(
@@ -63,6 +63,7 @@ fun MovieCard(
                         contentDescription = null,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
+                            .height(144.dp)
                             .clip(RoundedCornerShape(15.dp))
                     )
                 } else {
@@ -85,17 +86,54 @@ fun MovieCard(
                     text = movie.name,
                     fontFamily = TrovareTypography,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.Black
+                    color = Color.Black,
+                    modifier = Modifier.padding(end = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(end = 8.dp)
+                    contentPadding = PaddingValues(end = 16.dp)
                 ) {
                     items(
                         items = movie.genres
                     ) {
                         GenreCard(genre = it)
                     }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                ) {
+                    Text(
+                        text = "KP: " + movie.rating.kp,
+                        fontFamily = TrovareTypography,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text(
+                        text = "IMDB: " + movie.rating.imdb,
+                        fontFamily = TrovareTypography,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.Black
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_clock),
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = movie.movieLength + " мин.",
+                        fontFamily = TrovareTypography,
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Black
+                    )
                 }
             }
         }
@@ -132,10 +170,14 @@ fun MovieCardPreview() {
                 name = "Звёздные войны: Эпизод 4 – Новая надежда",
                 year = 1977,
                 description = "Татуин. Планета-пустыня. Уже постаревший рыцарь Джедай Оби Ван Кеноби спасает молодого Люка Скайуокера, когда тот пытается отыскать пропавшего дроида. С этого момента Люк осознает свое истинное назначение: он один из рыцарей Джедай. В то время как гражданская война охватила галактику, а войска повстанцев ведут бои против сил злого Императора, к Люку и Оби Вану присоединяется отчаянный пилот-наемник Хан Соло, и в сопровождении двух дроидов, R2D2 и C-3PO, этот необычный отряд отправляется на поиски предводителя повстанцев – принцессы Леи. Героям предстоит отчаянная схватка с устрашающим Дартом Вейдером – правой рукой Императора и его секретным оружием – «Звездой Смерти».",
-                movieLength = 121,
+                movieLength = "121",
                 ageRating = 6,
                 poster = null,
-                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма")
+                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма"),
+                rating = com.vladusecho.trovare.domain.model.MovieRating(
+                    kp = "8.2",
+                    imdb = "8.2"
+                )
             ),
             onCardClick = {}
         )

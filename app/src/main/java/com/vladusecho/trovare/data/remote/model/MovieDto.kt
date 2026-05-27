@@ -11,4 +11,5 @@ data class MovieDto(
     @SerializedName("ageRating") val ageRating: Int,
     @SerializedName("poster") val poster: PosterDto?,
     @SerializedName("genres") val genres: List<GenreDto>,
+    @SerializedName("rating") val rating: RatingDto?
 )
