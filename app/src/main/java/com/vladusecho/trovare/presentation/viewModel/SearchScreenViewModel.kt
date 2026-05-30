@@ -2,7 +2,6 @@ package com.vladusecho.trovare.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vladusecho.trovare.data.repository.MovieRepositoryImpl
 import com.vladusecho.trovare.domain.model.Movie
 import com.vladusecho.trovare.domain.usecase.GetMovieByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,20 +11,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class SearchScreenViewModel @Inject constructor(
     val getMoviesByNameUseCase: GetMovieByNameUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<MainState>(MainState.Initial)
+    private val _state = MutableStateFlow<SearchScreenState>(SearchScreenState.Initial)
     val state = _state.asStateFlow()
 
-    fun processCommand(command: MainCommand) {
+    fun processCommand(command: SearchScreenCommand) {
         when (command) {
-            is MainCommand.InputQuery -> {
+            is SearchScreenCommand.InputQuery -> {
                 viewModelScope.launch {
-                    _state.value = MainState.Loading
+                    _state.value = SearchScreenState.Loading
                     val searchResponse = getMoviesByNameUseCase(command.query)
-                    _state.value = MainState.Content(
+                    _state.value = SearchScreenState.Content(
                         movies = searchResponse.movies,
                         total = searchResponse.total
                     )
@@ -34,19 +33,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    sealed interface MainCommand {
+    sealed interface SearchScreenCommand {
         data class InputQuery(
             val query: String
-        ) : MainCommand
+        ) : SearchScreenCommand
     }
 
-    sealed interface MainState {
-        object Initial : MainState
+    sealed interface SearchScreenState {
+        object Initial : SearchScreenState
         data class Content(
             val movies: List<Movie>,
             val total: Int
-        ) : MainState
-        object Error : MainState
-        object Loading : MainState
+        ) : SearchScreenState
+        object Error : SearchScreenState
+        object Loading : SearchScreenState
     }
 }
