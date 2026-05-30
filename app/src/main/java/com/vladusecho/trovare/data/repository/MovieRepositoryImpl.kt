@@ -1,15 +1,21 @@
 package com.vladusecho.trovare.data.repository
 
-import com.vladusecho.trovare.data.mapper.MoviesDtoToMoviesMapper
+import com.vladusecho.trovare.data.mapper.moviesDtoToMoviesMapper
 import com.vladusecho.trovare.data.remote.ApiFactory
+import com.vladusecho.trovare.data.remote.ApiService
 import com.vladusecho.trovare.domain.model.Movie
+import com.vladusecho.trovare.domain.model.SearchResponse
 import com.vladusecho.trovare.domain.repository.MovieRepository
+import javax.inject.Inject
 
-object MovieRepositoryImpl : MovieRepository {
+class MovieRepositoryImpl @Inject constructor(
+    private val apiService: ApiService
 
-    val apiService = ApiFactory.apiService
+) : MovieRepository {
 
-    override suspend fun getMovieByName(query: String): List<Movie> {
-        return apiService.getMovies(query).docs.MoviesDtoToMoviesMapper()
+    override suspend fun getMovieByName(query: String): SearchResponse {
+        val response = apiService.getMovies(query)
+        val movies = response.docs.moviesDtoToMoviesMapper()
+        return SearchResponse(movies, response.total)
     }
 }
