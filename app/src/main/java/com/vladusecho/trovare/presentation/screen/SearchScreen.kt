@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.vladusecho.trovare.R
-import com.vladusecho.trovare.presentation.element.MovieCard
+import com.vladusecho.trovare.presentation.element.SearchMovieCard
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTheme
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTypography
 import com.vladusecho.trovare.presentation.viewModel.SearchScreenViewModel
@@ -57,6 +58,33 @@ fun SearchScreen(
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
+
+    SearchScreenContent(
+        paddingValues = paddingValues,
+        currentState = currentState,
+        listState = listState,
+        onBackClick = onBackClick,
+        onSearchClick = {
+            viewModel.processCommand(
+                SearchScreenViewModel.SearchScreenCommand.InputQuery(
+                    it
+                )
+            )
+            scope.launch {
+                listState.scrollToItem(0)
+            }
+        }
+    )
+}
+
+@Composable
+fun SearchScreenContent(
+    paddingValues: PaddingValues,
+    currentState: SearchScreenViewModel.SearchScreenState,
+    listState: LazyListState,
+    onBackClick: () -> Unit,
+    onSearchClick: (String) -> Unit
+) {
 
     Box(
         modifier = Modifier
@@ -77,16 +105,7 @@ fun SearchScreen(
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 16.dp, top = 64.dp),
                     onBackClick = onBackClick,
-                    onSearchClick = {
-                        viewModel.processCommand(
-                            SearchScreenViewModel.SearchScreenCommand.InputQuery(
-                                it
-                            )
-                        )
-                        scope.launch {
-                            listState.scrollToItem(0)
-                        }
-                    }
+                    onSearchClick = onSearchClick
                 )
             }
             when (currentState) {
@@ -116,7 +135,7 @@ fun SearchScreen(
                                 items = currentState.movies,
                                 key = { it.id }
                             ) {
-                                MovieCard(
+                                SearchMovieCard(
                                     movie = it,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -134,7 +153,14 @@ fun SearchScreen(
                     }
                 }
 
-                is SearchScreenViewModel.SearchScreenState.Error -> {}
+                is SearchScreenViewModel.SearchScreenState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Произошла ошибка, попробуйте позже")
+                    }
+                }
                 is SearchScreenViewModel.SearchScreenState.Initial -> {}
                 is SearchScreenViewModel.SearchScreenState.Loading -> {
                     Box(
@@ -215,10 +241,70 @@ fun MovieSearchBar(
 }
 
 @Composable
-@Preview(showBackground = true)
-fun MovieSearchBarPreview() {
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+fun SearchScreenContentPreview() {
     TrovareTheme() {
-        MovieSearchBar(
+        SearchScreenContent(
+            paddingValues = PaddingValues(),
+            currentState = SearchScreenViewModel.SearchScreenState.Content(
+                movies = listOf(),
+                total = 0
+            ),
+            listState = rememberLazyListState(),
+            onBackClick = { },
+            onSearchClick = { }
+        )
+    }
+}
+
+@Composable
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+fun SearchScreenErrorPreview() {
+    TrovareTheme() {
+        SearchScreenContent(
+            paddingValues = PaddingValues(),
+            currentState = SearchScreenViewModel.SearchScreenState.Error,
+            listState = rememberLazyListState(),
+            onBackClick = { },
+            onSearchClick = { }
+        )
+    }
+}
+
+@Composable
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+fun SearchScreenInitialPreview() {
+    TrovareTheme() {
+        SearchScreenContent(
+            paddingValues = PaddingValues(),
+            currentState = SearchScreenViewModel.SearchScreenState.Initial,
+            listState = rememberLazyListState(),
+            onBackClick = { },
+            onSearchClick = { }
+        )
+    }
+}
+
+@Composable
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+fun SearchScreenLoadingPreview() {
+    TrovareTheme() {
+        SearchScreenContent(
+            paddingValues = PaddingValues(),
+            currentState = SearchScreenViewModel.SearchScreenState.Loading,
+            listState = rememberLazyListState(),
             onBackClick = { },
             onSearchClick = { }
         )
