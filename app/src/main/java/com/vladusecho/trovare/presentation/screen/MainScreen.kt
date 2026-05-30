@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vladusecho.trovare.R
 import com.vladusecho.trovare.presentation.element.MovieCard
@@ -48,10 +49,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-
+    viewModel: MainViewModel = hiltViewModel()
 ) {
-
-    val viewModel = viewModel<MainViewModel>()
     val state = viewModel.state.collectAsState()
     val currentState = state.value
 

@@ -5,17 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.vladusecho.trovare.data.repository.MovieRepositoryImpl
 import com.vladusecho.trovare.domain.model.Movie
 import com.vladusecho.trovare.domain.usecase.GetMovieByNameUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    val getMoviesByNameUseCase: GetMovieByNameUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow<MainState>(MainState.Initial)
     val state = _state.asStateFlow()
-
-    val repository = MovieRepositoryImpl
-    val getMoviesByNameUseCase = GetMovieByNameUseCase(repository)
 
     fun processCommand(command: MainCommand) {
         when (command) {
