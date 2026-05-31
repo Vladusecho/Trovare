@@ -24,15 +24,20 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.requestFocus
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -50,7 +55,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
-    paddingValues: PaddingValues,
     onBackClick: () -> Unit
 ) {
     val state = viewModel.state.collectAsState()
@@ -60,7 +64,6 @@ fun SearchScreen(
     val scope = rememberCoroutineScope()
 
     SearchScreenContent(
-        paddingValues = paddingValues,
         currentState = currentState,
         listState = listState,
         onBackClick = onBackClick,
@@ -79,7 +82,6 @@ fun SearchScreen(
 
 @Composable
 fun SearchScreenContent(
-    paddingValues: PaddingValues,
     currentState: SearchScreenViewModel.SearchScreenState,
     listState: LazyListState,
     onBackClick: () -> Unit,
@@ -88,7 +90,6 @@ fun SearchScreenContent(
 
     Box(
         modifier = Modifier
-            .padding(bottom = paddingValues.calculateBottomPadding())
             .fillMaxSize()
             .background(Color.White)
     ) {
@@ -184,13 +185,20 @@ fun MovieSearchBar(
     onSearchClick: (String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+    }
 
     val searchQuery = remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = searchQuery.value,
         onValueChange = { searchQuery.value = it },
-        modifier = modifier,
+        modifier = modifier.focusRequester(focusRequester),
         shape = RoundedCornerShape(12.dp),
         placeholder = {
             Text(
@@ -248,7 +256,6 @@ fun MovieSearchBar(
 fun SearchScreenContentPreview() {
     TrovareTheme() {
         SearchScreenContent(
-            paddingValues = PaddingValues(),
             currentState = SearchScreenViewModel.SearchScreenState.Content(
                 movies = listOf(),
                 total = 0
@@ -268,7 +275,6 @@ fun SearchScreenContentPreview() {
 fun SearchScreenErrorPreview() {
     TrovareTheme() {
         SearchScreenContent(
-            paddingValues = PaddingValues(),
             currentState = SearchScreenViewModel.SearchScreenState.Error,
             listState = rememberLazyListState(),
             onBackClick = { },
@@ -285,7 +291,6 @@ fun SearchScreenErrorPreview() {
 fun SearchScreenInitialPreview() {
     TrovareTheme() {
         SearchScreenContent(
-            paddingValues = PaddingValues(),
             currentState = SearchScreenViewModel.SearchScreenState.Initial,
             listState = rememberLazyListState(),
             onBackClick = { },
@@ -302,7 +307,6 @@ fun SearchScreenInitialPreview() {
 fun SearchScreenLoadingPreview() {
     TrovareTheme() {
         SearchScreenContent(
-            paddingValues = PaddingValues(),
             currentState = SearchScreenViewModel.SearchScreenState.Loading,
             listState = rememberLazyListState(),
             onBackClick = { },

@@ -46,7 +46,6 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    paddingValues: PaddingValues,
     onSearchClick: () -> Unit
 ) {
 
@@ -55,7 +54,6 @@ fun HomeScreen(
 
     HomeScreenContent(
         currentState = currentState,
-        paddingValues = paddingValues,
         onSearchClick = onSearchClick
     )
 }
@@ -63,12 +61,10 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     currentState: HomeScreenViewModel.HomeScreenState,
-    paddingValues: PaddingValues,
     onSearchClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
-            .padding(bottom = paddingValues.calculateBottomPadding())
             .fillMaxSize()
             .background(Color.White)
     ) {
@@ -225,7 +221,6 @@ fun PagerIndicator(
 fun HomeScreenContentPreview() {
     TrovareTheme {
         HomeScreenContent(
-            paddingValues = PaddingValues(),
             currentState = HomeScreenViewModel.HomeScreenState.Content(
                 movies = listOf(
                     Movie(
@@ -285,7 +280,6 @@ fun HomeScreenContentPreview() {
 fun HomeScreenLoadingPreview() {
     TrovareTheme {
         HomeScreenContent(
-            paddingValues = PaddingValues(),
             currentState = HomeScreenViewModel.HomeScreenState.Loading,
             onSearchClick = {}
         )
@@ -300,7 +294,6 @@ fun HomeScreenLoadingPreview() {
 fun HomeScreenErrorPreview() {
     TrovareTheme {
         HomeScreenContent(
-            paddingValues = PaddingValues(),
             currentState = HomeScreenViewModel.HomeScreenState.Error,
             onSearchClick = {}
         )
