@@ -1,0 +1,14 @@
+package com.vladusecho.trovare.data.remote.model
+
+import com.google.gson.annotations.SerializedName
+
+
+data class MovieDetailsDto(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("year") val year: Int,
+    @SerializedName("description") val description: String,
+    @SerializedName("movieLength") val movieLength: String,
+    @SerializedName("ageRating") val ageRating: Int,
+    @SerializedName("poster") val poster: PosterDto?,
+)

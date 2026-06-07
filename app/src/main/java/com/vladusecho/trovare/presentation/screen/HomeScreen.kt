@@ -46,7 +46,8 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onMovieClick: (Int) -> Unit
 ) {
 
     val state = viewModel.state.collectAsState()
@@ -54,14 +55,16 @@ fun HomeScreen(
 
     HomeScreenContent(
         currentState = currentState,
-        onSearchClick = onSearchClick
+        onSearchClick = onSearchClick,
+        onMovieClick = onMovieClick
     )
 }
 
 @Composable
 fun HomeScreenContent(
     currentState: HomeScreenViewModel.HomeScreenState,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    onMovieClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -148,7 +151,9 @@ fun HomeScreenContent(
                                     stop = 1f,
                                     fraction = 1f - pageOffset.coerceIn(0f, 1f)
                                 )
-                            }) { }
+                            },
+                            onCardClick = { onMovieClick(movie.id) }
+                        )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Box(
@@ -267,7 +272,8 @@ fun HomeScreenContentPreview() {
                     )
                 )
             ),
-            onSearchClick = {}
+            onSearchClick = {},
+            onMovieClick = {}
         )
     }
 }
@@ -281,7 +287,8 @@ fun HomeScreenLoadingPreview() {
     TrovareTheme {
         HomeScreenContent(
             currentState = HomeScreenViewModel.HomeScreenState.Loading,
-            onSearchClick = {}
+            onSearchClick = {},
+            onMovieClick = {}
         )
     }
 }
@@ -295,7 +302,8 @@ fun HomeScreenErrorPreview() {
     TrovareTheme {
         HomeScreenContent(
             currentState = HomeScreenViewModel.HomeScreenState.Error,
-            onSearchClick = {}
+            onSearchClick = {},
+            onMovieClick = {}
         )
     }
 }

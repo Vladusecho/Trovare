@@ -1,5 +1,6 @@
 package com.vladusecho.trovare.presentation.nav
 
+import com.vladusecho.trovare.domain.model.Movie
 import kotlinx.serialization.Serializable
 
 sealed class NavScreen {
@@ -18,5 +19,6 @@ sealed class NavScreen {
     @Serializable
     object Favorite : NavScreen()
 
-
+    @Serializable
+    data class MovieDetails(val movieId: Int) : NavScreen()
 }

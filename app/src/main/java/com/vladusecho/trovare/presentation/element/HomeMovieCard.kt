@@ -1,5 +1,6 @@
 package com.vladusecho.trovare.presentation.element
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -19,12 +20,15 @@ import com.vladusecho.trovare.presentation.ui.theme.TrovareTheme
 fun HomeMovieCard(
     modifier: Modifier = Modifier,
     movie: Movie,
-    onCardClick: () -> Unit
+    onCardClick: (Int) -> Unit
 ) {
     Box(
         modifier = modifier
             .width(206.dp)
-            .height(260.dp),
+            .height(260.dp)
+            .clickable {
+                onCardClick(movie.id)
+            },
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
