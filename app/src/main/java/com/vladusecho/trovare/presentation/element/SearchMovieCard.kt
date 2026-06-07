@@ -38,7 +38,7 @@ import com.vladusecho.trovare.presentation.ui.theme.TrovareTheme
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTypography
 
 @Composable
-fun MovieCard(
+fun SearchMovieCard(
     modifier: Modifier = Modifier,
     movie: Movie,
     onCardClick: () -> Unit
@@ -162,9 +162,9 @@ fun GenreCard(
 
 @Composable
 @Preview(showBackground = true)
-fun MovieCardPreview() {
+fun SearchMovieCardPreview() {
     TrovareTheme() {
-        MovieCard(
+        SearchMovieCard(
             movie = Movie(
                 id = 0,
                 name = "Звёздные войны: Эпизод 4 – Новая надежда",
