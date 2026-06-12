@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -36,6 +38,7 @@ import com.vladusecho.trovare.domain.model.MovieDetails
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTheme
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTypography
 import com.vladusecho.trovare.presentation.viewModel.MovieDetailsScreenViewModel
+import java.util.Locale
 
 @Composable
 fun MovieDetailsScreen(
@@ -132,6 +135,46 @@ fun MovieDetailsScreenContent(
                         textAlign = TextAlign.Center
 
                     )
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = currentState.movieDetails.genres.take(2).joinToString { genre ->
+                                genre.replaceFirstChar {
+                                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                                }
+                            },
+                            color = Color.Gray,
+                            fontFamily = TrovareTypography,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                        )
+                        Text(
+                            text = " • ",
+                            color = Color.Gray,
+                            fontFamily = TrovareTypography,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 24.sp,
+                            modifier = Modifier
+                        )
+                        Text(
+                            text = currentState.movieDetails.ageRating.toString() + "+",
+                            color = Color.Gray,
+                            fontFamily = TrovareTypography,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                        )
+                    }
+                    MovieShortDescription(
+                        modifier = Modifier.padding(top = 16.dp),
+                        movieDetails = currentState.movieDetails
+                    )
                 }
 
             }
@@ -171,6 +214,98 @@ fun MovieDetailsScreenContent(
 }
 
 @Composable
+fun MovieShortDescription(
+    modifier: Modifier = Modifier,
+    movieDetails: MovieDetails
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xff402537))
+            .padding(vertical = 16.dp)
+            .height(96.dp)
+        ,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Длина",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+            Text(
+                text = movieDetails.movieLength + " мин",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+        }
+        VerticalDivider(
+            color = Color.Gray,
+            thickness = 0.5.dp,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Язык",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+            Text(
+                text = "Русский",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+        }
+        VerticalDivider(
+            color = Color.Gray,
+            thickness = 0.5.dp,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Рейтинг",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+            Text(
+                text = "4.5 KP",
+                color = Color.White,
+                fontFamily = TrovareTypography,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                modifier = Modifier
+            )
+        }
+    }
+}
+
+@Composable
 @Preview
 fun MovieScreenContentPreview(
 
@@ -187,6 +322,7 @@ fun MovieScreenContentPreview(
                     movieLength = "121",
                     ageRating = 6,
                     poster = "https://i.pinimg.com/474x/77/06/4d/77064dc550369ae49ee981788989b58b.jpg?nii=t",
+                    genres = listOf("боевик", "триллер", "криминал")
                 ),
             )
         )

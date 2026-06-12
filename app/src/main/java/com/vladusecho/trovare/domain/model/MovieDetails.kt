@@ -10,4 +10,5 @@ data class MovieDetails(
     val movieLength: String,
     val ageRating: Int,
     val poster: String?,
+    val genres: List<String>
 )

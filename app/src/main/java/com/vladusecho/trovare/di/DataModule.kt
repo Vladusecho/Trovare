@@ -3,6 +3,7 @@ package com.vladusecho.trovare.di
 import com.vladusecho.trovare.data.remote.ApiFactory
 import com.vladusecho.trovare.data.remote.ApiService
 import com.vladusecho.trovare.data.repository.MovieRepositoryImpl
+import com.vladusecho.trovare.data.repository.TestMovieRepositoryImpl
 import com.vladusecho.trovare.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module

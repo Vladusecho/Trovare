@@ -1,5 +1,6 @@
 package com.vladusecho.trovare.data.mapper
 
+import com.vladusecho.trovare.data.remote.model.GenreDto
 import com.vladusecho.trovare.data.remote.model.MovieDetailsDto
 import com.vladusecho.trovare.domain.model.Movie
 import com.vladusecho.trovare.domain.model.MovieDetails
@@ -12,6 +13,7 @@ fun MovieDetailsDto.movieDtoToMovieMapper(): MovieDetails{
         description = description,
         movieLength = movieLength,
         ageRating = ageRating,
-        poster = poster?.url
+        poster = poster?.url,
+        genres = genres.map { it.name }
     )
 }
