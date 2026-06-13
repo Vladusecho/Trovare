@@ -1,5 +1,6 @@
 package com.vladusecho.trovare.presentation.nav
 
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,7 +32,10 @@ fun AppNavGraph(
         composable<NavScreen.Home> {
             HomeScreen(
                 onSearchClick = { navState.navigateTo(NavScreen.Search) },
-                onMovieClick = { navState.navigateTo(NavScreen.MovieDetails(it)) }
+                onMovieClick = {
+                    navState.navigateTo(NavScreen.MovieDetails(it))
+                    Log.d("TAG", "MovieShortDescription: ${it}")
+                }
             )
         }
         composable<NavScreen.Search> {

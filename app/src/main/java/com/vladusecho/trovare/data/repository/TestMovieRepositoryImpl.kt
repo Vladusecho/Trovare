@@ -71,7 +71,13 @@ class TestMovieRepositoryImpl @Inject constructor(
                 movieLength = "121",
                 ageRating = 6,
                 poster = null,
-                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма")
+                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма"),
+                type = com.vladusecho.trovare.domain.model.Type.MOVIE,
+                seriesLength = "12",
+                rating = com.vladusecho.trovare.domain.model.MovieRating(
+                    kp = "8.2",
+                    imdb = "8.2"
+                )
             )
         )
         add(
@@ -83,7 +89,13 @@ class TestMovieRepositoryImpl @Inject constructor(
                 movieLength = "121",
                 ageRating = 6,
                 poster = null,
-                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма")
+                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма"),
+                type = com.vladusecho.trovare.domain.model.Type.TV_SERIES,
+                seriesLength = "12",
+                rating = com.vladusecho.trovare.domain.model.MovieRating(
+                    kp = "8.2",
+                    imdb = "8.2"
+                )
             )
         )
         add(
@@ -95,7 +107,13 @@ class TestMovieRepositoryImpl @Inject constructor(
                 movieLength = "121",
                 ageRating = 6,
                 poster = null,
-                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма")
+                genres = listOf("Боевик", "Фэнтези", "Приключения", "Драма"),
+                type = com.vladusecho.trovare.domain.model.Type.MOVIE,
+                seriesLength = "12",
+                rating = com.vladusecho.trovare.domain.model.MovieRating(
+                    kp = "8.2",
+                    imdb = "8.2"
+                )
             )
         )
     }

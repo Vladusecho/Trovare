@@ -35,6 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.vladusecho.trovare.R
 import com.vladusecho.trovare.domain.model.MovieDetails
+import com.vladusecho.trovare.domain.model.Type
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTheme
 import com.vladusecho.trovare.presentation.ui.theme.TrovareTypography
 import com.vladusecho.trovare.presentation.viewModel.MovieDetailsScreenViewModel
@@ -224,17 +225,20 @@ fun MovieShortDescription(
             .clip(RoundedCornerShape(16.dp))
             .background(Color(0xff402537))
             .padding(vertical = 16.dp)
-            .height(96.dp)
-        ,
+            .height(96.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Длина",
+                text = when (movieDetails.type) {
+                    Type.MOVIE -> "Длина"
+                    Type.TV_SERIES -> "Серия"
+                },
                 color = Color.White,
                 fontFamily = TrovareTypography,
                 fontWeight = FontWeight.Normal,
@@ -242,7 +246,10 @@ fun MovieShortDescription(
                 modifier = Modifier
             )
             Text(
-                text = movieDetails.movieLength + " мин",
+                text = when (movieDetails.type) {
+                    Type.MOVIE -> movieDetails.movieLength
+                    Type.TV_SERIES -> movieDetails.seriesLength
+                } + " мин",
                 color = Color.White,
                 fontFamily = TrovareTypography,
                 fontWeight = FontWeight.Bold,
@@ -256,11 +263,12 @@ fun MovieShortDescription(
             modifier = Modifier.padding(vertical = 16.dp)
         )
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Язык",
+                text = "Тип",
                 color = Color.White,
                 fontFamily = TrovareTypography,
                 fontWeight = FontWeight.Normal,
@@ -268,7 +276,10 @@ fun MovieShortDescription(
                 modifier = Modifier
             )
             Text(
-                text = "Русский",
+                text = when (movieDetails.type) {
+                    Type.MOVIE -> "Фильм"
+                    Type.TV_SERIES -> "Сериал"
+                },
                 color = Color.White,
                 fontFamily = TrovareTypography,
                 fontWeight = FontWeight.Bold,
@@ -282,7 +293,8 @@ fun MovieShortDescription(
             modifier = Modifier.padding(vertical = 16.dp)
         )
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -294,7 +306,7 @@ fun MovieShortDescription(
                 modifier = Modifier
             )
             Text(
-                text = "4.5 KP",
+                text = "KP: " + movieDetails.rating?.kp.toString(),
                 color = Color.White,
                 fontFamily = TrovareTypography,
                 fontWeight = FontWeight.Bold,
@@ -322,7 +334,13 @@ fun MovieScreenContentPreview(
                     movieLength = "121",
                     ageRating = 6,
                     poster = "https://i.pinimg.com/474x/77/06/4d/77064dc550369ae49ee981788989b58b.jpg?nii=t",
-                    genres = listOf("боевик", "триллер", "криминал")
+                    genres = listOf("боевик", "триллер", "криминал"),
+                    type = Type.MOVIE,
+                    seriesLength = "12",
+                    rating = com.vladusecho.trovare.domain.model.MovieRating(
+                        kp = "8.2",
+                        imdb = "8.2"
+                    )
                 ),
             )
         )
